@@ -1,0 +1,24 @@
+item controler crud
+view controler - details
+authentication middleware
+
+
+
+!!!!!!!!!!!!!!!!!
+/*
+
+USE THIS WITH EVERY AWAIT CHECK Up
+
+
+try{
+        const token = await jwtPromises.sign({email}, secret)
+        res.cookie('user', token)
+        res.redirect('/')
+        } catch(error){
+            return res.status(404).render('login', {error: getErrorMessage(error)})
+        }
+
+*/
+
+
+final skelet
