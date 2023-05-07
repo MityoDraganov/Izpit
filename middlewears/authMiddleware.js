@@ -29,7 +29,7 @@ exports.authentication = async (req, res, next) => {
 
 exports.isAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated) {
-        return res.redirect('/login');
+        return res.redirect('/404');
     }
 
     next();
@@ -42,7 +42,7 @@ exports.notForUsers = async (req, res, next) =>{
         try {
             const decodedToken = await jwt.verify(token, secret);
 
-            return res.redirect('/')
+            return res.redirect('/404')
         } catch(err) {
             console.log(err.message);
 

@@ -20,11 +20,22 @@ async function dashboardView(req,res){
 
 async function detailsView(req,res){
     const id = req.params.id
-    console.log('id')
-    console.log(id);
-    const item =   await itemModel.findById(id).populate('author').populate('commentList').lean()
+
+    const item =   await itemModel.findById(id).populate('author').populate({
+        path: 'commentList.userId',
+        select:'username'
+    }).lean()
+    const comments = item.commentList
+    const toSendComments = []
+
+    //comments.forEach(element =>{
+    //    const user = await userModel.findById(element.userId)
+    //    console.log(user)
+    //})
+
+    console.log(comments)
     const token = req.cookies['user'];
-    console.log(token)
+
     console.log('item')
     console.log(item)
     const author = item.author
@@ -53,7 +64,6 @@ async function detailsView(req,res){
     console.log('currentUser')
     const currentUser = await userModel.findOne({username: decodedToken.username})
     console.log(currentUser)
-    console.log('author')
     console.log(author)
 
     
@@ -65,13 +75,11 @@ async function detailsView(req,res){
         notLogged = true
     }
 
-    return res.render('details', {item, isOwner, isBasicUser})
-} else{
 
-    return res.render('details', {item})
 }
 
 
+    res.render('details', {item, isOwner, isBasicUser})
 
 }
 
@@ -97,4 +105,27 @@ async function createView(req,res){
     res.render('create')
 }
 
-module.exports = {homeView, registerView, loginView, dashboardView, createView, detailsView, editView}
+
+async function profileView(req,res){
+
+    const token = req.cookies['user'];
+    const decodedToken = await verifyToken(token)
+
+    const userUsername = decodedToken.username
+
+
+    
+    const user = await userModel.find({username: userUsername}).lean()
+
+    const myUser = user[0]
+
+    const photos = await itemModel.find({author: myUser._id}).lean()
+
+    const photosCount = photos.length
+    console.log(photos)
+    //console.log(myUser)
+    //console.log(userUsername)
+    res.render('profile', {myUser, photos, photosCount})
+}
+
+module.exports = {homeView, registerView, loginView, dashboardView, createView, detailsView, editView, profileView}

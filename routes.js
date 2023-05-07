@@ -46,5 +46,10 @@ router.get('/delete/:id',authentication,isAuthenticated, itemControler.itemDelet
 
 router.post('/comment/:id', authentication,isAuthenticated, itemControler.commentPhoto)
 
+router.get('/404', (req,res)=>{
+    res.render('404')
+})
+//profile
+router.get('/profile',authentication, isAuthenticated, viewControler.profileView)
 
 module.exports = router

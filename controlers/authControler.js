@@ -20,9 +20,19 @@ async function findOneUser(email){
 async function registerPOST (req, res){
     const { username, email, password, rePassword} = req.body
     
+    if(email.length < 10){
+        return res.render('register', {error: "Email too short"})
+    }
+
+    if(username.length < 2){
+        return res.render('register', {error: "Username too short"})
+    }
     //check if passwords match
     if(password !== rePassword){
         return res.render('register', {error: "Passwords does not match"})
+    }
+    if(password.length < 4){
+        return res.render('register', {error: "Password too short"})
     }
     
    // if(!onlyLetters.test(firstName) || !onlyLetters.test(lastName)){
@@ -33,9 +43,9 @@ async function registerPOST (req, res){
      //   return res.render('register', {error: "First name should be at least 3 letters nad last name at least five"})
     //}
 
-    if(!validator.isEmail(email)){
-        return res.render('register', {error: "Invalid email"})
-    }
+    //if(!validator.isEmail(email)){
+    //    return res.render('register', {error: "Invalid email"})
+    //}
 
     //check if username already exists
     //const isTaken = await findOneUser(username)

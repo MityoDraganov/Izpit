@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+const IMAGE_PATTERN = /^https?:\/\//;
+
 const itemSchema = new mongoose.Schema({
     name:{
         type: String,
@@ -7,10 +9,11 @@ const itemSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        required: true
+        required: true,
+        match: IMAGE_PATTERN 
     },
     age: {
-        type: String,
+        type: Number,
         required: true
     },
     description: {
@@ -21,10 +24,15 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    commentList: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'user'
-    }],
+    commentList: [
+        {
+              userId: {
+                    type: mongoose.Types.ObjectId,
+                    ref: 'user'
+              },
+              comment: String
+        }
+    ],
     author: {
         type: mongoose.Types.ObjectId,
         ref: 'user'
